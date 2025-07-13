@@ -21,22 +21,22 @@ struct ContentView: View {
           VStack(alignment: .leading, spacing: 4) {
             Text(item.name)
               .font(.headline)
-            Text("CPU: \(item.cpuCount)개 | 메모리: \(formatBytes(item.memorySize))")
+            Text("CPU: \(item.cpuCount)cores | memory: \(formatBytes(item.memorySize))")//개 | 메모리
               .font(.caption)
               .foregroundColor(.secondary)
-            Text("디스크: \(formatBytes(item.diskSize))")
+            Text("disk: \(formatBytes(item.diskSize))")//디스크
               .font(.caption)
               .foregroundColor(.secondary)
           }
           .padding(.vertical, 2)
         }
       }
-      .navigationTitle("가상 머신")
+      .navigationTitle("Virtual Machines")//가상 머신
       .navigationSplitViewColumnWidth(min: 250, ideal: 300)
       .toolbar {
         ToolbarItem {
           Button(action: { showingAddVM = true }) {
-            Label("VM 추가", systemImage: "plus")
+            Label("Add VM", systemImage: "plus")//VM 추가
           }
         }
       }
@@ -47,7 +47,7 @@ struct ContentView: View {
       if let selectedItem = selectedItem {
         VMDetailView(item: selectedItem)
       } else {
-        Text("가상 머신을 선택하세요")
+        Text("Select a virtual machine")//가상 머신을 선택하세요
           .foregroundColor(.secondary)
       }
     }
@@ -91,45 +91,45 @@ struct AddVMView: View {
   var body: some View {
     NavigationView {
       Form {
-        Section(header: Text("기본 설정")) {
-          TextField("VM 이름", text: $name)
+        Section(header: Text("Basic Settings")) {//기본 설정
+          TextField("VM Name", text: $name)//VM 이름
           
-          Picker("운영체제", selection: $isLinux) {
+          Picker("Operating System", selection: $isLinux) {//운영체제
             Text("Linux").tag(true)
-            Text("기타").tag(false)
+            Text("MacOS").tag(false)
           }
           .pickerStyle(.segmented)
         }
         
-        Section(header: Text("하드웨어 설정")) {
-          Stepper("CPU 코어: \(cpuCount)개", value: $cpuCount, in: 1...8)
+        Section(header: Text("Hardware Settings")) {//하드웨어 설정
+          Stepper("CPUCores: \(cpuCount)", value: $cpuCount, in: 1...8)//CPU 코어
           
           VStack(alignment: .leading) {
-            Text("메모리: \(String(format: "%.0f", memorySize))GB")
+            Text("memorySize: \(String(format: "%.0f", memorySize))GB")//메모리
             Slider(value: $memorySize, in: 1...16, step: 1)
           }
           
           VStack(alignment: .leading) {
-            Text("디스크 용량: \(String(format: "%.0f", diskSize))GB")
+            Text("diskSize: \(String(format: "%.0f", diskSize))GB")//디스크 용량
             Slider(value: $diskSize, in: 10...100, step: 5)
           }
         }
         
-        Section(header: Text("저장 위치")) {
-          TextField("VM 번들 경로", text: $vmBundlePath)
+        Section(header: Text("Storage Location")) {//저장 위치
+          TextField("VM Bundle Path", text: $vmBundlePath)//VM 번들 경로
             .textFieldStyle(.roundedBorder)
         }
       }
-      .navigationTitle("새 가상 머신")
+      .navigationTitle("New Virtual Machine")//새 가상 머신
       .toolbar {
         ToolbarItem(placement: .cancellationAction) {
-          Button("취소") {
+          Button("Cancel") {//취소
             dismiss()
           }
         }
         
         ToolbarItem(placement: .confirmationAction) {
-          Button("생성") {
+          Button("Create") {//생성
             createVM()
           }
           .disabled(name.isEmpty)
@@ -156,7 +156,7 @@ struct AddVMView: View {
     do {
       try modelContext.save()
     } catch {
-      print("VM 저장 실패: \(error)")
+      print("Failed to save VM: \(error)")//VM 저장 실패
     }
     
     dismiss()
@@ -174,29 +174,29 @@ struct VMDetailView: View {
           .font(.largeTitle)
           .fontWeight(.bold)
         
-        Text(item.isLinux ? "Linux 가상 머신" : "가상 머신")
+        Text(item.isLinux ? "Linux Virtual Machine" : "MacOS Virtual Machine")//"Linux 가상 머신" : "MacOS 가상 머신"
           .font(.title3)
           .foregroundColor(.secondary)
       }
       
       VStack(alignment: .leading, spacing: 12) {
-        Text("하드웨어 구성")
+        Text("Hardware Configuration")//하드웨어 구성
           .font(.headline)
         
         HStack {
           Label("CPU", systemImage: "cpu")
           Spacer()
-          Text("\(item.cpuCount)개 코어")
+          Text("\(item.cpuCount)cores")//개 코어
         }
         
         HStack {
-          Label("메모리", systemImage: "memorychip")
+          Label("memory", systemImage: "memorychip")//메모리
           Spacer()
           Text(formatBytes(item.memorySize))
         }
         
         HStack {
-          Label("디스크", systemImage: "internaldrive")
+          Label("disk", systemImage: "internaldrive")//디스크
           Spacer()
           Text(formatBytes(item.diskSize))
         }
@@ -206,11 +206,11 @@ struct VMDetailView: View {
       .cornerRadius(10)
       
       VStack(alignment: .leading, spacing: 12) {
-        Text("파일 경로")
+        Text("File Path")//파일 경로
           .font(.headline)
         
         VStack(alignment: .leading, spacing: 4) {
-          Text("VM 번들:")
+          Text("VM Bundle:")//VM 번들
             .font(.caption)
             .foregroundColor(.secondary)
           Text(item.vmBundlePath)
@@ -228,7 +228,7 @@ struct VMDetailView: View {
       }) {
         HStack {
           Image(systemName: "play.fill")
-          Text("가상 머신 시작")
+          Text("Start Virtual Machine")//가상 머신 시작
         }
         .frame(maxWidth: .infinity)
         .padding()
