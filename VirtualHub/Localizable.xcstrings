@@ -1,0 +1,103 @@
+{
+  "sourceLanguage" : "en",
+  "strings" : {
+    "%lldcores" : {
+
+    },
+    "Add VM" : {
+
+    },
+    "Basic Settings" : {
+
+    },
+    "Cancel" : {
+
+    },
+    "CPU" : {
+
+    },
+    "CPU: %lldcores | memory: %@" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "CPU: %1$lldcores | memory: %2$@"
+          }
+        }
+      }
+    },
+    "CPUCores: %lld" : {
+
+    },
+    "Create" : {
+
+    },
+    "disk" : {
+
+    },
+    "disk: %@" : {
+
+    },
+    "diskSize: %@GB" : {
+
+    },
+    "File Path" : {
+
+    },
+    "Hardware Configuration" : {
+
+    },
+    "Hardware Settings" : {
+
+    },
+    "Linux" : {
+
+    },
+    "Linux Virtual Machine" : {
+
+    },
+    "MacOS" : {
+
+    },
+    "MacOS Virtual Machine" : {
+
+    },
+    "memory" : {
+
+    },
+    "memorySize: %@GB" : {
+
+    },
+    "New Virtual Machine" : {
+
+    },
+    "Operating System" : {
+
+    },
+    "Select a virtual machine" : {
+
+    },
+    "Start Virtual Machine" : {
+
+    },
+    "Storage Location" : {
+
+    },
+    "Virtual Machines" : {
+
+    },
+    "VM Bundle Path" : {
+
+    },
+    "VM Bundle:" : {
+
+    },
+    "VM Name" : {
+
+    },
+    "새 가상 머신..." : {
+
+    }
+  },
+  "version" : "1.0"
+}

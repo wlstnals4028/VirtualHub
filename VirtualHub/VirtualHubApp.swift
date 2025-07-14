@@ -57,7 +57,7 @@ class VMWindowManager: ObservableObject {
     
     // 새 창 생성
     let window = NSWindow(
-      contentRect: NSRect(x: 100, y: 100, width: 1200, height: 800),
+      contentRect: NSRect(x: 100, y: 100, width: 1920, height: 1200),
       styleMask: [.titled, .closable, .miniaturizable, .resizable],
       backing: .buffered,
       defer: false
