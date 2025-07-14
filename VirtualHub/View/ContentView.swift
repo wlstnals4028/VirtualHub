@@ -13,6 +13,8 @@ struct ContentView: View {
   @Query private var items: [Item]
   @State private var showingAddVM = false
   @State private var selectedItem: Item?
+  @State private var showingDeleteAlert = false
+  @State private var itemToDelete: Item?
   
   var body: some View {
     NavigationSplitView {
@@ -21,53 +23,100 @@ struct ContentView: View {
           VStack(alignment: .leading, spacing: 4) {
             Text(item.name)
               .font(.headline)
-            Text("CPU: \(item.cpuCount)cores | memory: \(formatBytes(item.memorySize))")//개 | 메모리
+            Text("CPU: \(item.cpuCount)cores | Memory: \(formatBytes(item.memorySize))")
               .font(.caption)
               .foregroundColor(.secondary)
-            Text("disk: \(formatBytes(item.diskSize))")//디스크
+            Text("disk: \(formatBytes(item.diskSize))")
               .font(.caption)
               .foregroundColor(.secondary)
           }
           .padding(.vertical, 2)
         }
-      }
-      .navigationTitle("Virtual Machines")//가상 머신
-      .navigationSplitViewColumnWidth(min: 250, ideal: 300)
-      .toolbar {
-        ToolbarItem {
-          Button(action: { showingAddVM = true }) {
-            Label("Add VM", systemImage: "plus")//VM 추가
+        .contextMenu {
+          Button("Delete Virtual Machine", systemImage: "trash", role: .destructive) {
+            itemToDelete = item
+            showingDeleteAlert = true
           }
         }
       }
-      .sheet(isPresented: $showingAddVM) {
-        AddVMView(modelContext: modelContext)
+      .navigationTitle("Virtual Machines")
+      .navigationSplitViewColumnWidth(min: 250, ideal: 300)
+      .toolbar {
+        ToolbarItem {
+          Button(action: {
+            showingAddVM = true
+            selectedItem = nil
+          }) {
+            Label("Add Virtual Machine", systemImage: "plus")
+          }
+        }
+      }
+      .onDeleteCommand {
+        if let selectedItem = selectedItem {
+          itemToDelete = selectedItem
+          showingDeleteAlert = true
+        }
       }
     } detail: {
-      if let selectedItem = selectedItem {
+      if showingAddVM {
+        AddVMView(
+          modelContext: modelContext,
+          onDismiss: {
+            showingAddVM = false
+          }
+        )
+      } else if let selectedItem = selectedItem {
         VMDetailView(item: selectedItem)
       } else {
-        Text("Select a virtual machine")//가상 머신을 선택하세요
+        Text("Select a virtual machine")
           .foregroundColor(.secondary)
       }
     }
     .navigationSplitViewStyle(.balanced)
-    .onDeleteCommand {
-      // 삭제 명령 처리
-      if let selectedItem = selectedItem {
-        if let index = items.firstIndex(of: selectedItem) {
-          deleteItems(offsets: IndexSet([index]))
+    .alert("Delete Virtual Machine", isPresented: $showingDeleteAlert) {
+      Button("Cancel", role: .cancel) { }
+      Button("Delete", role: .destructive) {
+        if let item = itemToDelete {
+          deleteVM(item)
         }
+      }
+    } message: {
+      if let item = itemToDelete {
+        Text("Are you sure you want to delete '\(item.name)'? This action cannot be undone and will permanently remove all Virtual Machine files.")
       }
     }
   }
   
-  private func deleteItems(offsets: IndexSet) {
+  private func deleteVM(_ item: Item) {
+    let fileManager = FileManager.default
+    let bundlePath = item.vmBundlePath
+    
+    do {
+      if fileManager.fileExists(atPath: bundlePath) {
+        try fileManager.removeItem(atPath: bundlePath)
+        print("Successfully deleted VM bundle: \(bundlePath)")
+      } else {
+        print("VM bundle not found: \(bundlePath)")
+      }
+    } catch {
+      print("Error deleting VM bundle: \(error.localizedDescription)")
+    }
+    
     withAnimation {
-      for index in offsets {
-        modelContext.delete(items[index])
+      modelContext.delete(item)
+      
+      if selectedItem == item {
+        selectedItem = nil
       }
     }
+    
+    do {
+      try modelContext.save()
+    } catch {
+      print("Error saving context after deletion: \(error.localizedDescription)")
+    }
+    
+    itemToDelete = nil
   }
   
   private func formatBytes(_ bytes: UInt64) -> String {
@@ -79,7 +128,7 @@ struct ContentView: View {
 
 struct AddVMView: View {
   let modelContext: ModelContext
-  @Environment(\.dismiss) private var dismiss
+  let onDismiss: () -> Void
   
   @State private var name = ""
   @State private var isLinux = true
@@ -89,51 +138,131 @@ struct AddVMView: View {
   @State private var vmBundlePath = NSHomeDirectory()
   
   var body: some View {
-    NavigationView {
-      Form {
-        Section(header: Text("Basic Settings")) {//기본 설정
-          TextField("VM Name", text: $name)//VM 이름
-          
-          Picker("Operating System", selection: $isLinux) {//운영체제
-            Text("Linux").tag(true)
-            Text("MacOS").tag(false)
-          }
-          .pickerStyle(.segmented)
-        }
-        
-        Section(header: Text("Hardware Settings")) {//하드웨어 설정
-          Stepper("CPUCores: \(cpuCount)", value: $cpuCount, in: 1...8)//CPU 코어
-          
+    ScrollView {
+      VStack(spacing: 0) {
+        // 헤더
+        HStack {
           VStack(alignment: .leading) {
-            Text("memorySize: \(String(format: "%.0f", memorySize))GB")//메모리
-            Slider(value: $memorySize, in: 1...16, step: 1)
+            Text("New Virtual Machine")//새 가상 머신
+              .font(.largeTitle)
+              .fontWeight(.bold)
+            Text("Configure your virtual machine settings")//가상 머신 설정을 구성하세요
+              .font(.subheadline)
+              .foregroundColor(.secondary)
           }
           
-          VStack(alignment: .leading) {
-            Text("diskSize: \(String(format: "%.0f", diskSize))GB")//디스크 용량
-            Slider(value: $diskSize, in: 10...100, step: 5)
+          Spacer()
+          
+          HStack {
+            Button("Cancel") {//취소
+              onDismiss()
+            }
+            .buttonStyle(.bordered)
+            
+            Button("Create") {//생성
+              createVM()
+            }
+            .buttonStyle(.borderedProminent)
+            .disabled(name.isEmpty)
           }
         }
+        .padding()
         
-        Section(header: Text("Storage Location")) {//저장 위치
-          TextField("VM Bundle Path", text: $vmBundlePath)//VM 번들 경로
-            .textFieldStyle(.roundedBorder)
-        }
-      }
-      .navigationTitle("New Virtual Machine")//새 가상 머신
-      .toolbar {
-        ToolbarItem(placement: .cancellationAction) {
-          Button("Cancel") {//취소
-            dismiss()
-          }
-        }
+        Divider()
         
-        ToolbarItem(placement: .confirmationAction) {
-          Button("Create") {//생성
-            createVM()
+        // 폼 내용
+        VStack(spacing: 20) {
+          VStack(alignment: .leading, spacing: 12) {
+            Text("Basic Settings")//기본 설정
+              .font(.headline)
+            
+            VStack(alignment: .leading, spacing: 8) {
+              Text("Virtual Machine Name")//VM 이름
+                .font(.subheadline)
+                .fontWeight(.medium)
+              TextField("Enter Virtual Machine name", text: $name)//VM 이름 입력
+                .textFieldStyle(.roundedBorder)
+            }
+            
+            VStack(alignment: .leading, spacing: 8) {
+              Text("Operating System")//운영체제
+                .font(.subheadline)
+                .fontWeight(.medium)
+              Picker("Operating System", selection: $isLinux) {
+                Text("Linux").tag(true)
+                Text("MacOS").tag(false)
+              }
+              .pickerStyle(.segmented)
+            }
           }
-          .disabled(name.isEmpty)
+          .padding()
+          .background(Color.gray.opacity(0.05))
+          .cornerRadius(10)
+          
+          VStack(alignment: .leading, spacing: 12) {
+            Text("Hardware Settings")//하드웨어 설정
+              .font(.headline)
+            
+            VStack(alignment: .leading, spacing: 12) {
+              HStack {
+                Text("CPU Cores")//CPU 코어
+                  .font(.subheadline)
+                  .fontWeight(.medium)
+                Spacer()
+                Stepper("\(cpuCount)", value: $cpuCount, in: 1...8)
+              }
+              
+              VStack(alignment: .leading, spacing: 8) {
+                HStack {
+                  Text("Memory")//메모리
+                    .font(.subheadline)
+                    .fontWeight(.medium)
+                  Spacer()
+                  Text("\(String(format: "%.0f", memorySize))GB")
+                    .font(.subheadline)
+                    .fontWeight(.medium)
+                    .foregroundColor(.blue)
+                }
+                Slider(value: $memorySize, in: 1...16, step: 1)
+              }
+              
+              VStack(alignment: .leading, spacing: 8) {
+                HStack {
+                  Text("Disk Size")//디스크 용량
+                    .font(.subheadline)
+                    .fontWeight(.medium)
+                  Spacer()
+                  Text("\(String(format: "%.0f", diskSize))GB")
+                    .font(.subheadline)
+                    .fontWeight(.medium)
+                    .foregroundColor(.blue)
+                }
+                Slider(value: $diskSize, in: 10...100, step: 5)
+              }
+            }
+          }
+          .padding()
+          .background(Color.gray.opacity(0.05))
+          .cornerRadius(10)
+          
+          VStack(alignment: .leading, spacing: 12) {
+            Text("Storage Location")//저장 위치
+              .font(.headline)
+            
+            VStack(alignment: .leading, spacing: 8) {
+              Text("Virtual Machine Bundle Path")//VM 번들 경로
+                .font(.subheadline)
+                .fontWeight(.medium)
+              TextField("Virtual Machine Bundle Path", text: $vmBundlePath)
+                .textFieldStyle(.roundedBorder)
+                .font(.system(.body, design: .monospaced))
+            }
+          }
+          .padding()
+          .background(Color.gray.opacity(0.05))
+          .cornerRadius(10)
         }
+        .padding()
       }
     }
   }
@@ -155,17 +284,19 @@ struct AddVMView: View {
     
     do {
       try modelContext.save()
+      onDismiss()
     } catch {
       print("Failed to save VM: \(error)")//VM 저장 실패
     }
-    
-    dismiss()
   }
 }
+
 
 struct VMDetailView: View {
   let item: Item
   @State private var isRunning = false
+  @State private var showingDeleteAlert = false
+  @Environment(\.modelContext) private var modelContext
   
   var body: some View {
     VStack(alignment: .leading, spacing: 20) {
@@ -190,7 +321,7 @@ struct VMDetailView: View {
         }
         
         HStack {
-          Label("memory", systemImage: "memorychip")//메모리
+          Label("Memory", systemImage: "memorychip")//메모리
           Spacer()
           Text(formatBytes(item.memorySize))
         }
@@ -210,7 +341,7 @@ struct VMDetailView: View {
           .font(.headline)
         
         VStack(alignment: .leading, spacing: 4) {
-          Text("VM Bundle:")//VM 번들
+          Text("Virtual Machine Bundle:")//VM 번들
             .font(.caption)
             .foregroundColor(.secondary)
           Text(item.vmBundlePath)
@@ -237,9 +368,58 @@ struct VMDetailView: View {
         .cornerRadius(10)
       }
       .disabled(isRunning)
+      
+      Button(action: {
+        showingDeleteAlert = true
+      }) {
+        HStack {
+          Image(systemName: "trash")
+          Text("Delete Virtual Machine")
+        }
+        .frame(maxWidth: .infinity)
+        .padding()
+        .background(Color.red)
+        .foregroundColor(.white)
+        .cornerRadius(10)
+      }
+      .disabled(isRunning)
     }
     .padding()
     .frame(maxWidth: .infinity, alignment: .leading)
+    .alert("Delete Virtual Machine", isPresented: $showingDeleteAlert) {
+      Button("Cancel", role: .cancel) { }
+      Button("Delete", role: .destructive) {
+        deleteVM()
+      }
+    } message: {
+      Text("Are you sure you want to delete '\(item.name)'? This action cannot be undone and will permanently remove all Virtual Machine files.")
+    }
+  }
+  
+  private func deleteVM() {
+    let fileManager = FileManager.default
+    let bundlePath = item.vmBundlePath
+    
+    do {
+      if fileManager.fileExists(atPath: bundlePath) {
+        try fileManager.removeItem(atPath: bundlePath)
+        print("Successfully deleted VM bundle: \(bundlePath)")
+      }
+    } catch {
+      print("Error deleting VM bundle: \(error.localizedDescription)")
+    }
+    
+    // 데이터베이스에서 삭제
+    modelContext.delete(item)
+    
+    do {
+      try modelContext.save()
+    } catch {
+      print("Error saving context after deletion: \(error.localizedDescription)")
+    }
+    
+    // 선택 해제 알림
+    NotificationCenter.default.post(name: .selectionChanged, object: nil)
   }
   
   private func startVM() {
@@ -256,3 +436,22 @@ struct VMDetailView: View {
 extension Notification.Name {
   static let selectionChanged = Notification.Name("selectionChanged")
 }
+
+extension FileManager {
+  func safeRemoveItem(atPath path: String) -> Bool {
+    guard fileExists(atPath: path) else {
+      print("File does not exist: \(path)")
+      return true
+    }
+    
+    do {
+      try removeItem(atPath: path)
+      print("Successfully removed: \(path)")
+      return true
+    } catch {
+      print("Failed to remove item at \(path): \(error.localizedDescription)")
+      return false
+    }
+  }
+}
+

@@ -1,102 +1,320 @@
 {
   "sourceLanguage" : "en",
   "strings" : {
+    "%@GB" : {
+
+    },
+    "%lld" : {
+
+    },
     "%lldcores" : {
-
-    },
-    "Add VM" : {
-
-    },
-    "Basic Settings" : {
-
-    },
-    "Cancel" : {
-
-    },
-    "CPU" : {
-
-    },
-    "CPU: %lldcores | memory: %@" : {
       "localizations" : {
-        "en" : {
+        "ko" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "CPU: %1$lldcores | memory: %2$@"
+            "state" : "translated",
+            "value" : "%lld코어"
           }
         }
       }
     },
-    "CPUCores: %lld" : {
+    "Add Virtual Machine" : {
+      "localizations" : {
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "가상 머신 추가"
+          }
+        }
+      }
+    },
+    "Are you sure you want to delete '%@'? This action cannot be undone and will permanently remove all Virtual Machine files." : {
+      "localizations" : {
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "'%@'을 삭제하시겠습니까? 이 작업은 되돌릴 수 없으며 모든 가상 머신 파일을 영구적으로 제거합니다."
+          }
+        }
+      }
+    },
+    "Basic Settings" : {
+      "localizations" : {
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "기본 설정"
+          }
+        }
+      }
+    },
+    "Cancel" : {
+      "localizations" : {
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "취소"
+          }
+        }
+      }
+    },
+    "Configure your virtual machine settings" : {
+      "localizations" : {
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "가상 머신 설정 구성"
+          }
+        }
+      }
+    },
+    "CPU" : {
 
+    },
+    "CPU Cores" : {
+      "localizations" : {
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "CPU 코어"
+          }
+        }
+      }
+    },
+    "CPU: %lldcores | Memory: %@" : {
+      "localizations" : {
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "CPU: %lld코어 | 메모리: %@"
+          }
+        }
+      }
     },
     "Create" : {
-
+      "localizations" : {
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "생성"
+          }
+        }
+      }
+    },
+    "Delete" : {
+      "localizations" : {
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "제거"
+          }
+        }
+      }
+    },
+    "Delete Virtual Machine" : {
+      "localizations" : {
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "가상 머신 제거"
+          }
+        }
+      }
     },
     "disk" : {
-
+      "localizations" : {
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "디스크"
+          }
+        }
+      }
+    },
+    "Disk Size" : {
+      "localizations" : {
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "디스크 크기"
+          }
+        }
+      }
     },
     "disk: %@" : {
-
+      "localizations" : {
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "디스크: %@"
+          }
+        }
+      }
     },
-    "diskSize: %@GB" : {
-
+    "Enter Virtual Machine name" : {
+      "localizations" : {
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "가상 머신 이름 입력"
+          }
+        }
+      }
     },
     "File Path" : {
-
+      "localizations" : {
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "파일 경로"
+          }
+        }
+      }
     },
     "Hardware Configuration" : {
-
+      "localizations" : {
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "하드웨어 구성"
+          }
+        }
+      }
     },
     "Hardware Settings" : {
-
+      "localizations" : {
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "하드웨어 설정"
+          }
+        }
+      }
     },
     "Linux" : {
 
     },
     "Linux Virtual Machine" : {
-
+      "localizations" : {
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Linux 가상 머신"
+          }
+        }
+      }
     },
     "MacOS" : {
 
     },
     "MacOS Virtual Machine" : {
-
+      "localizations" : {
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "MacOS 가상 머신"
+          }
+        }
+      }
     },
-    "memory" : {
-
-    },
-    "memorySize: %@GB" : {
-
+    "Memory" : {
+      "localizations" : {
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "메모리"
+          }
+        }
+      }
     },
     "New Virtual Machine" : {
-
+      "localizations" : {
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "새 가상 머신"
+          }
+        }
+      }
     },
     "Operating System" : {
-
+      "localizations" : {
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "운영 체제"
+          }
+        }
+      }
     },
     "Select a virtual machine" : {
-
+      "localizations" : {
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "가상 머신 선택"
+          }
+        }
+      }
     },
     "Start Virtual Machine" : {
-
+      "localizations" : {
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "가상 머신 시작"
+          }
+        }
+      }
     },
     "Storage Location" : {
-
+      "localizations" : {
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "저장 위치"
+          }
+        }
+      }
+    },
+    "Virtual Machine Bundle Path" : {
+      "localizations" : {
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "가상 머신 번들 경로"
+          }
+        }
+      }
+    },
+    "Virtual Machine Bundle:" : {
+      "localizations" : {
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "가상 머신 번들:"
+          }
+        }
+      }
+    },
+    "Virtual Machine Name" : {
+      "localizations" : {
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "가상 머신 이름"
+          }
+        }
+      }
     },
     "Virtual Machines" : {
-
-    },
-    "VM Bundle Path" : {
-
-    },
-    "VM Bundle:" : {
-
-    },
-    "VM Name" : {
-
-    },
-    "새 가상 머신..." : {
-
+      "localizations" : {
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "가상 머신"
+          }
+        }
+      }
     }
   },
   "version" : "1.0"
