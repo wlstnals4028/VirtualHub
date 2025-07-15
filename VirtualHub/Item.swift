@@ -14,13 +14,17 @@ final class Item {
   var name: String
   var vmBundlePath: String
   var mainDiskImagePath: String
-  var efiVariableStorePath: String
   var machineIdentifierPath: String
   var needsInstall: Bool
-  var isLinux: Bool
   var cpuCount: Int
   var memorySize: UInt64 // bytes 단위
   var diskSize: UInt64 // bytes 단위
+  
+  var isLinux: Bool
+  
+  var efiVariableStorePath: String?
+  var auxiliaryStoragePath: String?
+  var hardwareModelPath: String?
   
   init(
     name: String,
@@ -41,9 +45,23 @@ final class Item {
     self.diskSize = diskSize
     
     self.mainDiskImagePath = path + "Disk.img"
-    self.efiVariableStorePath = path + "NVRAM"
     self.machineIdentifierPath = path + "MachineIdentifier"
+
+    if isLinux {
+      //for linux
+      self.efiVariableStorePath = path + "NVRAM"
+      self.auxiliaryStoragePath = nil
+      self.hardwareModelPath = nil
+    }
+    
+    else {
+      //for macos
+      self.efiVariableStorePath = nil
+      self.auxiliaryStoragePath = path + "AuxiliaryStorage"
+      self.hardwareModelPath = path + "HardwareModel"
+    }
     
     self.needsInstall = true
   }
 }
+

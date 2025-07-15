@@ -215,14 +215,14 @@ class AppDelegate: NSObject, NSApplicationDelegate, VZVirtualMachineDelegate, Ob
       // This is a fresh install: Create a new machine identifier and EFI variable store,
       // and configure a USB mass storage device to boot the ISO image.
       platform.machineIdentifier = createAndSaveMachineIdentifier(machineIdentifierPath: item.machineIdentifierPath)
-      bootloader.variableStore = createEFIVariableStore(efiVariableStorePath: item.efiVariableStorePath)
+      bootloader.variableStore = createEFIVariableStore(efiVariableStorePath: item.efiVariableStorePath!)
       disksArray.add(createUSBMassStorageDeviceConfiguration())
     } else {
       // The VM is booting from a disk image that already has the OS installed.
       // Retrieve the machine identifier and EFI variable store that were saved to
       // disk during installation.
       platform.machineIdentifier = retrieveMachineIdentifier(machineIdentifierPath: item.machineIdentifierPath)
-      bootloader.variableStore = retrieveEFIVariableStore(efiVariableStorePath: item.efiVariableStorePath)
+      bootloader.variableStore = retrieveEFIVariableStore(efiVariableStorePath: item.efiVariableStorePath!)
     }
     
     virtualMachineConfiguration.platform = platform
