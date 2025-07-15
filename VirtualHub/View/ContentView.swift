@@ -143,10 +143,10 @@ struct AddVMView: View {
         // 헤더
         HStack {
           VStack(alignment: .leading) {
-            Text("New Virtual Machine")//새 가상 머신
+            Text("New Virtual Machine")
               .font(.largeTitle)
               .fontWeight(.bold)
-            Text("Configure your virtual machine settings")//가상 머신 설정을 구성하세요
+            Text("Configure your virtual machine settings")
               .font(.subheadline)
               .foregroundColor(.secondary)
           }
@@ -154,12 +154,12 @@ struct AddVMView: View {
           Spacer()
           
           HStack {
-            Button("Cancel") {//취소
+            Button("Cancel") {
               onDismiss()
             }
             .buttonStyle(.bordered)
             
-            Button("Create") {//생성
+            Button("Create") {
               createVM()
             }
             .buttonStyle(.borderedProminent)
@@ -173,19 +173,19 @@ struct AddVMView: View {
         // 폼 내용
         VStack(spacing: 20) {
           VStack(alignment: .leading, spacing: 12) {
-            Text("Basic Settings")//기본 설정
+            Text("Basic Settings")
               .font(.headline)
             
             VStack(alignment: .leading, spacing: 8) {
-              Text("Virtual Machine Name")//VM 이름
+              Text("Virtual Machine Name")
                 .font(.subheadline)
                 .fontWeight(.medium)
-              TextField("Enter Virtual Machine name", text: $name)//VM 이름 입력
+              TextField("Enter Virtual Machine name", text: $name)
                 .textFieldStyle(.roundedBorder)
             }
             
             VStack(alignment: .leading, spacing: 8) {
-              Text("Operating System")//운영체제
+              Text("Operating System")
                 .font(.subheadline)
                 .fontWeight(.medium)
               Picker("Operating System", selection: $isLinux) {
@@ -200,16 +200,16 @@ struct AddVMView: View {
           .cornerRadius(10)
           
           VStack(alignment: .leading, spacing: 12) {
-            Text("Hardware Settings")//하드웨어 설정
+            Text("Hardware Settings")
               .font(.headline)
             
             VStack(alignment: .leading, spacing: 12) {
               HStack {
-                Text("CPU Cores")//CPU 코어
+                Text("CPU Cores")
                   .font(.subheadline)
                   .fontWeight(.medium)
                 Spacer()
-                Stepper("\(cpuCount)", value: $cpuCount, in: 1...8)
+                Stepper("\(cpuCount)", value: $cpuCount, in: 1...ProcessInfo.processInfo.processorCount)
               }
               
               VStack(alignment: .leading, spacing: 8) {
@@ -223,7 +223,7 @@ struct AddVMView: View {
                     .fontWeight(.medium)
                     .foregroundColor(.blue)
                 }
-                Slider(value: $memorySize, in: 1...16, step: 1)
+                Slider(value: $memorySize, in: 1...Double(ProcessInfo.processInfo.physicalMemory >> 30), step: 1)
               }
               
               VStack(alignment: .leading, spacing: 8) {
@@ -237,7 +237,7 @@ struct AddVMView: View {
                     .fontWeight(.medium)
                     .foregroundColor(.blue)
                 }
-                Slider(value: $diskSize, in: 10...100, step: 5)
+                Slider(value: $diskSize, in: 10...200, step: 5)
               }
             }
           }
@@ -246,11 +246,11 @@ struct AddVMView: View {
           .cornerRadius(10)
           
           VStack(alignment: .leading, spacing: 12) {
-            Text("Storage Location")//저장 위치
+            Text("Storage Location")
               .font(.headline)
             
             VStack(alignment: .leading, spacing: 8) {
-              Text("Virtual Machine Bundle Path")//VM 번들 경로
+              Text("Virtual Machine Bundle Path")
                 .font(.subheadline)
                 .fontWeight(.medium)
               TextField("Virtual Machine Bundle Path", text: $vmBundlePath)
@@ -286,7 +286,7 @@ struct AddVMView: View {
       try modelContext.save()
       onDismiss()
     } catch {
-      print("Failed to save VM: \(error)")//VM 저장 실패
+      print("Failed to save VM: \(error)")
     }
   }
 }
@@ -305,29 +305,29 @@ struct VMDetailView: View {
           .font(.largeTitle)
           .fontWeight(.bold)
         
-        Text(item.isLinux ? "Linux Virtual Machine" : "MacOS Virtual Machine")//"Linux 가상 머신" : "MacOS 가상 머신"
+        Text(item.isLinux ? "Linux Virtual Machine" : "MacOS Virtual Machine")
           .font(.title3)
           .foregroundColor(.secondary)
       }
       
       VStack(alignment: .leading, spacing: 12) {
-        Text("Hardware Configuration")//하드웨어 구성
+        Text("Hardware Configuration")
           .font(.headline)
         
         HStack {
           Label("CPU", systemImage: "cpu")
           Spacer()
-          Text("\(item.cpuCount)cores")//개 코어
+          Text("\(item.cpuCount)cores")
         }
         
         HStack {
-          Label("Memory", systemImage: "memorychip")//메모리
+          Label("Memory", systemImage: "memorychip")
           Spacer()
           Text(formatBytes(item.memorySize))
         }
         
         HStack {
-          Label("disk", systemImage: "internaldrive")//디스크
+          Label("disk", systemImage: "internaldrive")
           Spacer()
           Text(formatBytes(item.diskSize))
         }
@@ -337,11 +337,11 @@ struct VMDetailView: View {
       .cornerRadius(10)
       
       VStack(alignment: .leading, spacing: 12) {
-        Text("File Path")//파일 경로
+        Text("File Path")
           .font(.headline)
         
         VStack(alignment: .leading, spacing: 4) {
-          Text("Virtual Machine Bundle:")//VM 번들
+          Text("Virtual Machine Bundle:")
             .font(.caption)
             .foregroundColor(.secondary)
           Text(item.vmBundlePath)
@@ -359,7 +359,7 @@ struct VMDetailView: View {
       }) {
         HStack {
           Image(systemName: "play.fill")
-          Text("Start Virtual Machine")//가상 머신 시작
+          Text("Start Virtual Machine")
         }
         .frame(maxWidth: .infinity)
         .padding()

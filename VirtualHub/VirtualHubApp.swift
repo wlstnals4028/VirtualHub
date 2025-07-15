@@ -30,14 +30,6 @@ struct VirtualHubApp: App {
       ContentView()
     }
     .modelContainer(sharedModelContainer)
-    .commands {
-      CommandGroup(replacing: .newItem) {
-        Button("New Virtual Machine") {
-          // 새 VM 생성 창 열기
-        }
-        .keyboardShortcut("n", modifiers: .command)
-      }
-    }
   }
 }
 
