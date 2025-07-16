@@ -8,11 +8,13 @@
 
 /* Begin PBXBuildFile section */
 		068209162E23F7D400CB0708 /* Virtualization.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 068209152E23F7D400CB0708 /* Virtualization.framework */; };
+		06E3ABDC2E272C9D00398C1C /* README.md in Resources */ = {isa = PBXBuildFile; fileRef = 06E3ABDB2E272C8600398C1C /* README.md */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
 		068208EE2E23F76B00CB0708 /* VirtualHub.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = VirtualHub.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		068209152E23F7D400CB0708 /* Virtualization.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Virtualization.framework; path = System/Library/Frameworks/Virtualization.framework; sourceTree = SDKROOT; };
+		06E3ABDB2E272C8600398C1C /* README.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = README.md; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFileSystemSynchronizedRootGroup section */
@@ -38,6 +40,7 @@
 		068208E52E23F76B00CB0708 = {
 			isa = PBXGroup;
 			children = (
+				06E3ABDB2E272C8600398C1C /* README.md */,
 				068208F02E23F76B00CB0708 /* VirtualHub */,
 				068209142E23F7D400CB0708 /* Frameworks */,
 				068208EF2E23F76B00CB0708 /* Products */,
@@ -125,6 +128,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				06E3ABDC2E272C9D00398C1C /* README.md in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

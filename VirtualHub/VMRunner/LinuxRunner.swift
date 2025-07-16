@@ -10,11 +10,6 @@ import SwiftData
 import SwiftUI
 import AppKit
 
-//var vmBundlePath = NSHomeDirectory() + "/GUI Linux VM.bundle/"
-//var mainDiskImagePath = vmBundlePath + "Disk.img"
-//var efiVariableStorePath = vmBundlePath + "NVRAM"
-//var machineIdentifierPath = vmBundlePath + "MachineIdentifier"
-
 class LinuxRunner: NSObject, NSApplicationDelegate, VZVirtualMachineDelegate, ObservableObject {
   
   @IBOutlet var window: NSWindow!
@@ -49,7 +44,6 @@ class LinuxRunner: NSObject, NSApplicationDelegate, VZVirtualMachineDelegate, Ob
     }
     
     do {
-      // 20 GB disk space.
       try mainDiskFileHandle.truncate(atOffset: DiskSize)
     } catch {
       fatalError("Failed to truncate the main disk image.")
@@ -77,7 +71,6 @@ class LinuxRunner: NSObject, NSApplicationDelegate, VZVirtualMachineDelegate, Ob
   }
   
   private func computeMemorySize(MemorySize : UInt64) -> UInt64 {
-    //var memorySize = (8 * 1024 * 1024 * 1024) as UInt64 // 4 GiB
     var memorySize = MemorySize
     
     memorySize = max(memorySize, VZVirtualMachineConfiguration.minimumAllowedMemorySize)
@@ -236,8 +229,8 @@ class LinuxRunner: NSObject, NSApplicationDelegate, VZVirtualMachineDelegate, Ob
     
     virtualMachineConfiguration.networkDevices = [createNetworkDeviceConfiguration()]
     virtualMachineConfiguration.graphicsDevices = [createGraphicsDeviceConfiguration()]
-    virtualMachineConfiguration.audioDevices = [createInputAudioDeviceConfiguration(), createOutputAudioDeviceConfiguration()]
-    //virtualMachineConfiguration.audioDevices = [createAudioDeviceConfiguration()]
+    //virtualMachineConfiguration.audioDevices = [createInputAudioDeviceConfiguration(), createOutputAudioDeviceConfiguration()]
+    virtualMachineConfiguration.audioDevices = [createAudioDeviceConfiguration()]
     
     virtualMachineConfiguration.keyboards = [VZUSBKeyboardConfiguration()]
     virtualMachineConfiguration.pointingDevices = [VZUSBScreenCoordinatePointingDeviceConfiguration()]
