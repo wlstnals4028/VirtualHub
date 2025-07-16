@@ -1,5 +1,5 @@
 //
-//  AppDelegate.swift
+//  LinuxRunner.swift
 //  VirtualHub
 //
 //  Created by 진수민 on 7/13/25.
@@ -15,7 +15,7 @@ import AppKit
 //var efiVariableStorePath = vmBundlePath + "NVRAM"
 //var machineIdentifierPath = vmBundlePath + "MachineIdentifier"
 
-class AppDelegate: NSObject, NSApplicationDelegate, VZVirtualMachineDelegate, ObservableObject {
+class LinuxRunner: NSObject, NSApplicationDelegate, VZVirtualMachineDelegate, ObservableObject {
   
   @IBOutlet var window: NSWindow!
   

@@ -91,7 +91,7 @@ class WindowDelegate: NSObject, NSWindowDelegate {
 // VM 뷰 컨트롤러
 class VMViewController: NSViewController {
   private let item: Item
-  private var appDelegate: AppDelegate?
+  private var linuxrunner: LinuxRunner?
   private var vmView: VZVirtualMachineView?
   
   init(item: Item) {
@@ -124,13 +124,13 @@ class VMViewController: NSViewController {
   }
   
   func startVM() {
-    appDelegate = AppDelegate()
-    appDelegate?.virtualMachineView = vmView
+    linuxrunner = LinuxRunner()
+    linuxrunner?.virtualMachineView = vmView
     
     // VM 시작
     DispatchQueue.main.async { [weak self] in
       guard let self = self else { return }
-      self.appDelegate?.applicationDidFinishLaunching(
+      self.linuxrunner?.applicationDidFinishLaunching(
         Notification(name: .init("VMStart")),
         item: self.item
       )
@@ -140,7 +140,7 @@ class VMViewController: NSViewController {
   override func viewWillDisappear() {
     super.viewWillDisappear()
     // VM 정리 작업
-    if let vm = appDelegate?.virtualMachine {
+    if let vm = linuxrunner?.virtualMachine {
       if vm.state == .running {
         vm.stop {_ in
           print("VM stopped successfully")
